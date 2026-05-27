@@ -1549,6 +1549,20 @@ async def check_messages(message: types.Message):
     except Exception as e:
         await bot.send_message(config.LOGS_ID, f"<blockquote><b>❌ Ошибка при обработке сообщения: <code>{str(e)}</code></b></blockquote>")
 
+from flask import Flask
+from threading import Thread
+
+flask_app = Flask('')
+
+@flask_app.route('/')
+def home():
+    return "Bot is running"
+
+def run_flask():
+    flask_app.run(host='0.0.0.0', port=8080)
+
+Thread(target=run_flask).start()
+
 if __name__ == '__main__':
     with sqlite3.connect("db.db") as conn:
         cursor = conn.cursor()
