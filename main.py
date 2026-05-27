@@ -18,6 +18,20 @@ import kb
 import config
 import sqlite3
 import states
+from flask import Flask
+from threading import Thread
+
+# Flask для Render (чтобы не было ошибки с портом)
+flask_app = Flask('')
+
+@flask_app.route('/')
+def home():
+    return "Bot is running"
+
+def run_flask():
+    flask_app.run(host='0.0.0.0', port=8080)
+
+Thread(target=run_flask).start()
 
 def random_quote():
     quotes = ['Не переставай верить в свои силы, ведь фортуна уже готова улыбнуться тебе.',
@@ -1548,21 +1562,6 @@ async def check_messages(message: types.Message):
                     await bot.send_message(config.LOGS_ID, f"<blockquote><b>❌ Ошибка при обработке сообщения: <code>{str(e)}</code></b></blockquote>")
     except Exception as e:
         await bot.send_message(config.LOGS_ID, f"<blockquote><b>❌ Ошибка при обработке сообщения: <code>{str(e)}</code></b></blockquote>")
-
-from flask import Flask
-import asyncio
-
-flask_app = Flask('')
-
-@flask_app.route('/')
-def home():
-    return "Bot is running"
-
-def run_flask():
-    flask_app.run(host='0.0.0.0', port=8080)
-
-import threading
-threading.Thread(target=run_flask, daemon=True).start()
 
 if __name__ == '__main__':
     with sqlite3.connect("db.db") as conn:
