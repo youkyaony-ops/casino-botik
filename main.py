@@ -1550,7 +1550,7 @@ async def check_messages(message: types.Message):
         await bot.send_message(config.LOGS_ID, f"<blockquote><b>❌ Ошибка при обработке сообщения: <code>{str(e)}</code></b></blockquote>")
 
 from flask import Flask
-from threading import Thread
+import asyncio
 
 flask_app = Flask('')
 
@@ -1561,7 +1561,8 @@ def home():
 def run_flask():
     flask_app.run(host='0.0.0.0', port=8080)
 
-Thread(target=run_flask).start()
+import threading
+threading.Thread(target=run_flask, daemon=True).start()
 
 if __name__ == '__main__':
     with sqlite3.connect("db.db") as conn:
